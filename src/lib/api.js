@@ -1,4 +1,10 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+// Vite only exposes variables that begin with VITE_.  Accept the original
+// VITE_API_URL name as well as VITE_API_BASE_URL so existing Vercel projects
+// keep working.  The backend routes all live below /api.
+const configuredApiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = configuredApiUrl
+  ? `${configuredApiUrl.replace(/\/$/, '')}${configuredApiUrl.replace(/\/$/, '').endsWith('/api') ? '' : '/api'}`
+  : 'http://localhost:4000/api';
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {

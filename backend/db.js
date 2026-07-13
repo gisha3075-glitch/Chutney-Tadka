@@ -8,11 +8,14 @@ const DATA_DIR = path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 
 const config = {
-  host: process.env.DB_HOST || process.env.DB_SERVER || '127.0.0.1',
-  port: Number(process.env.DB_PORT || 3306),
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '0125',
-  database: process.env.DB_NAME || 'Chutney-Tadka',
+  // Railway's MySQL service exposes MYSQLHOST, MYSQLPORT, MYSQLUSER,
+  // MYSQLPASSWORD, and MYSQLDATABASE. DB_* aliases keep local development
+  // and other hosts supported.
+  host: process.env.DB_HOST || process.env.DB_SERVER || process.env.MYSQLHOST || '127.0.0.1',
+  port: Number(process.env.DB_PORT || process.env.MYSQLPORT || 3306),
+  user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
+  password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || process.env.MYSQL_ROOT_PASSWORD || '0125',
+  database: process.env.DB_NAME || process.env.MYSQLDATABASE || 'Chutney-Tadka',
   waitForConnections: true,
   connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10),
   namedPlaceholders: true,
